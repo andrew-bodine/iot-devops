@@ -1,0 +1,19 @@
+---
+# tasks file for deploy_precompiled_tests_to_remote
+
+# Calculate strip-components value necessary.
+- set_fact:
+    strip: "{{package_path.split('/') | length - 1}}"
+
+- name: Create context on remote.
+  file:
+      path: "{{ansible_env.HOME}}/{{package_name}}"
+      state: directory
+
+- name: Deploy all precompiled tests to all remotes.
+  copy:
+    src: "{{package_path}}/{{package_name}}.tgz"
+    dest: "{{ansible_env.HOME}}/{{package_name}}/{{package_name}}.tgz"
+
+- name: Unpack precompiled tests on remotes.
+  shell: "tar -xzf {{ansible_env.HOME}}/{{package_name}}/{{package_name}}.tgz --strip-components {{strip}} -C {{ansible_env.HOME}}/{{package_name}}"

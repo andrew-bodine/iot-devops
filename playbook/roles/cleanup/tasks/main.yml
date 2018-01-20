@@ -1,0 +1,7 @@
+---
+# tasks file for cleanup
+
+- name: Remove precompiled test archive.
+  file:
+      path: "{{package_path}}/{{package_name}}.tgz"
+      state: absent

@@ -1,0 +1,21 @@
+---
+
+# This playbook captures the current approach towards iterating with
+# IoT development with real Raspberry Pi devices.
+
+- hosts: local
+  roles:
+    - precompile_arm_linux_tests
+    - package_precompiled_tests
+
+- hosts: raspis
+  roles:
+    - deploy_precompiled_tests_to_remote
+
+- hosts: local
+  roles:
+    - cleanup
+
+- hosts: raspis
+  roles:
+    - run_remote_precompiled_tests

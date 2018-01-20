@@ -1,0 +1,22 @@
+---
+# tasks file for package_precompiled_tests
+
+- name: Find all precompiled tests recursively.
+  find:
+    paths: '{{package_path}}'
+    patterns: '*.test'
+    recurse: yes
+  register: tests
+
+# Filter paths from find results.
+- set_fact:
+    paths: "{{tests.files | map(attribute='path') | list}}"
+
+- name: Archive all precompiled tests.
+  shell: "tar -czf {{package_path}}/{{package_name}}.tgz {{paths|join(' ')}}"
+
+# Cleanup precompiled test source files.
+- file:
+      path: "{{item}}"
+      state: absent
+  with_items: "{{paths}}"

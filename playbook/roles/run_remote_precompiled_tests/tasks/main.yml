@@ -1,0 +1,24 @@
+---
+# tasks file for run_remote_precompiled_tests
+
+- name: Find all precompiled tests recursively.
+  find:
+    paths: '.'
+    patterns: '*.test'
+    recurse: yes
+  register: tests
+
+# Filter paths from find results.
+- set_fact:
+    paths: "{{tests.files | map(attribute='path') | list}}"
+
+- name: Run the precompiled tests on remote devices.
+  become: true
+  shell: "sudo ./{{item}}"
+  with_items: "{{paths}}"
+  verbosity: 1
+
+- name: Remove context from remote.
+  file:
+      path: "{{ansible_env.HOME}}/{{package_name}}"
+      state: absent

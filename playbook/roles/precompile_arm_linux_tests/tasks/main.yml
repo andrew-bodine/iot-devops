@@ -1,0 +1,5 @@
+---
+# tasks file for precompile_arm_linux_tests
+
+- name: Precompile all package tests for linux and ARM architecture.
+  shell: "GOARCH=arm GOOS=linux ginkgo build -r {{package_path}}"
