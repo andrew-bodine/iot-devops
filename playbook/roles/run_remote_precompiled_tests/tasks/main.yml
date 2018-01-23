@@ -3,9 +3,9 @@
 
 - name: Find all precompiled tests recursively.
   find:
-    paths: '.'
-    patterns: '*.test'
-    recurse: yes
+      paths: '.'
+      patterns: '*.test'
+      recurse: yes
   register: tests
 
 # Filter paths from find results.
@@ -14,9 +14,8 @@
 
 - name: Run the precompiled tests on remote devices.
   become: true
-  shell: "sudo ./{{item}}"
+  shell: "./{{item}}"
   with_items: "{{paths}}"
-  verbosity: 1
 
 - name: Remove context from remote.
   file:
